@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fotos - Nuestro Tiempo Juntas</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
+        
+        body {
+            font-family: 'Playfair Display', serif;
+            background: linear-gradient(135deg, #fff5f5 0%, #fed7d7 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .dancing-font {
+            font-family: 'Dancing Script', cursive;
+        }
+        
+        .photo-item {
+            transition: all 0.3s ease;
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(40px);
+            animation: fadeInUp 1s forwards;
+        }
+        
+        .photo-item:nth-child(1) { animation-delay: 0.1s; }
+        .photo-item:nth-child(2) { animation-delay: 0.2s; }
+        .photo-item:nth-child(3) { animation-delay: 0.3s; }
+        .photo-item:nth-child(4) { animation-delay: 0.4s; }
+        .photo-item:nth-child(5) { animation-delay: 0.5s; }
+        .photo-item:nth-child(6) { animation-delay: 0.6s; }
+        
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .photo-item:hover {
+            transform: scale(1.05) translateY(0);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            z-index: 10;
+        }
+        
+        .modal {
+            backdrop-filter: blur(10px);
+        }
+        
+        .heart {
+            position: absolute;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.7;
+            background: transparent;
+        }
+
+        .heart-shape {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            left: 0;
+            top: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .heart-svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .floating {
+            animation: floating 6s ease-in-out infinite;
+        }
+
+        @keyframes floating {
+            0% { transform: translate(0, 0px) scale(1); }
+            30% { transform: translate(0, 20px) scale(1.08); }
+            60% { transform: translate(0, -10px) scale(0.95); }
+            100% { transform: translate(0, 0px) scale(1); }
+        }
+    </style>
+<!-- Audio de fondo -->
+<audio id="bg-music" loop>
+    <source src="imagenes/www.joeemilio.co.za - Manuel Medrano - La mujer que bota fuego (Letra Lyrics) (320 KBps).mp3" type="audio/mpeg">
+    Tu navegador no soporta el elemento de audio.
+</audio>
+</head>
+<body class="antialiased">
+    <!-- Fondos decorativos -->
+    <div id="hearts-container" class="fixed inset-0 pointer-events-none z-0"></div>
+    
+    <!-- Navegación -->
+    <nav class="relative z-20 bg-white bg-opacity-90 backdrop-blur-sm shadow-lg rounded-full mx-4 mt-4 mb-8">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex justify-center space-x-8">
+                <a href="index.html" class="flex items-center space-x-2 text-gray-600 px-4 py-2 rounded-full font-semibold transition-all hover:bg-rose-50 hover:text-rose-600">
+                    <i class="fas fa-home"></i>
+                    <span>Inicio</span>
+                </a>
+                                <a href="carta.html" class="flex items-center space-x-2 text-rose-600 bg-rose-50 px-4 py-2 rounded-full font-semibold transition-all hover:bg-rose-100">
+                    <i class="fas fa-envelope"></i>
+                    <span>Carta</span>
+                </a>
+                <a href="fotos.html" class="flex items-center space-x-2 text-rose-600 bg-rose-50 px-4 py-2 rounded-full font-semibold transition-all hover:bg-rose-100">
+                    <i class="fas fa-images"></i>
+                    <span>Fotos</span>
+                </a>
+                <a href="videos.html" class="flex items-center space-x-2 text-gray-600 px-4 py-2 rounded-full font-semibold transition-all hover:bg-rose-50 hover:text-rose-600">
+                    <i class="fas fa-video"></i>
+                    <span>Videos</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contenido principal -->
+    <div class="relative z-10 container mx-auto px-2 sm:px-4 py-6 sm:py-8">
+        <!-- Encabezado -->
+        <header class="text-center mb-10 mt-6">
+            <h1 class="dancing-font text-4xl sm:text-5xl md:text-6xl font-bold text-rose-700 mb-3 sm:mb-4 drop-shadow">Nuestras Fotos</h1>
+            <p class="text-lg sm:text-xl md:text-2xl text-rose-600 italic">Cada imagen es especial</p>
+        </header>
+        
+        <!-- Galería de fotos -->
+        <section class="mb-10 sm:mb-12">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
+                <!-- Foto 1 -->
+                <div class="photo-item bg-white rounded-2xl shadow-lg overflow-hidden" onclick="openModal('modal1')">
+                    <img
+                        src="imagenes/Imagen de WhatsApp 2025-09-10 a las 20.28.24_a95e8bad.jpg"
+                        alt="Nuestra primera cita"
+                        class="w-full h-80 object-cover object-center"
+                    >
+                    <div class="p-4">
+                        <h3 class="font-semibold text-rose-700 mb-2">El lugar donde empezo todo</h3>
+                        <p class="text-gray-600 text-sm">Desde ese día, mi corazón te pertenece por completo. Eres mi amor eterno.</p>
+                    </div>
+                </div>
+
+                <!-- Foto 2 -->
+                <div class="photo-item bg-white rounded-2xl shadow-lg overflow-hidden" onclick="openModal('modal2')">
+                    <img
+                        src="imagenes/Imagen de WhatsApp 2025-10-24 a las 10.13.52_2b07932c.jpg"
+                        alt="Paseos en el parque"
+                        class="w-full h-80 object-cover object-center"
+                    >
+                    <div class="p-4">
+                        <h3 class="font-semibold text-rose-700 mb-2">Cuando tuvimos un dia lindo</h3>
+                        <p class="text-gray-600 text-sm">Cada paso a tu lado es una aventura que quiero vivir eternamente. Te amo más cada día.</p>
+                    </div>
+                </div>
+
+                <!-- Foto 3 -->
+                <div class="photo-item bg-white rounded-2xl shadow-lg overflow-hidden" onclick="openModal('modal3')">
+                    <img
+                        src="imagenes/Imagen de WhatsApp 2025-10-24 a las 10.13.52_9f5c6a6e.jpg"
+                        alt="Cena romántica"
+                        class="w-full h-80 object-cover object-center"
+                    >
+                    <div class="p-4">
+                        <h3 class="font-semibold text-rose-700 mb-2">Foto haciendo match</h3>
+                        <p class="text-gray-600 text-sm">En tus ojos encuentro el amor más puro y verdadero. Eres mi alma gemela.</p>
+                    </div>
+                </div>
+
+                <!-- Foto 4 -->
+                <div class="photo-item bg-white rounded-2xl shadow-lg overflow-hidden" onclick="openModal('modal4')">
+                    <img
+                        src="imagenes/Imagen de WhatsApp 2025-10-24 a las 10.13.52_b4403c19.jpg"
+                        alt="Momentos especiales"
+                        class="w-full h-80 object-cover object-center"
+                    >
+                    <div class="p-4">
+                        <h3 class="font-semibold text-rose-700 mb-2">La sonrisa que causas en mi</h3>
+                        <p class="text-gray-600 text-sm">Eres mi todo, mi razón de ser, mi amor eterno. Sin ti, mi vida no tiene sentido.</p>
+                    </div>
+                </div>
+
+                <!-- Foto 5 -->
+                <div class="photo-item bg-white rounded-2xl shadow-lg overflow-hidden" onclick="openModal('modal5')">
+                    <img
+                        src="imagenes/Imagen de WhatsApp 2025-10-24 a las 10.13.55_1dd4ff37.jpg"
+                        alt="Risas compartidas"
+                        class="w-full h-80 object-cover object-center"
+                    >
+                    <div class="p-4">
+                        <h3 class="font-semibold text-rose-700 mb-2">Nosotras como snoppy</h3>
+                        <p class="text-gray-600 text-sm">Tu sonrisa ilumina mi vida como el sol ilumina el día. Eres mi razón de sonreír.</p>
+                    </div>
+                </div>
+
+                <!-- Foto 6 -->
+                <div class="photo-item bg-white rounded-2xl shadow-lg overflow-hidden" onclick="openModal('modal6')">
+                    <img
+                        src="imagenes/Imagen de WhatsApp 2025-10-24 a las 10.13.55_35d957e5.jpg"
+                        alt="Abrazos eternos"
+                        class="w-full h-80 object-cover object-center"
+                    >
+                    <div class="p-4">
+                        <h3 class="font-semibold text-rose-700 mb-2">El dia que conociste a Mirella</h3>
+                        <p class="text-gray-600 text-sm">En tus brazos encuentro la paz y el amor que siempre soñé. Eres mi hogar.</p>
+                    </div>
+                </div>
+
+                <!-- Foto 7 -->
+                <div class="photo-item bg-white rounded-2xl shadow-lg overflow-hidden" onclick="openModal('modal7')">
+                    <img
+                        src="imagenes/Imagen de WhatsApp 2025-10-24 a las 10.13.55_aed1ad01.jpg"
+                        alt="Miradas que hablan"
+                        class="w-full h-80 object-cover object-center"
+                    >
+                    <div class="p-4">
+                        <h3 class="font-semibold text-rose-700 mb-2">Cuando desperte a tu lado</h3>
+                        <p class="text-gray-600 text-sm">Una sola mirada tuya y mi mundo se llena de amor. Tus ojos son mi universo.</p>
+                    </div>
+                </div>
+
+                <!-- Foto 8 -->
+                <div class="photo-item bg-white rounded-2xl shadow-lg overflow-hidden" onclick="openModal('modal8')">
+                    <img
+                        src="imagenes/Imagen de WhatsApp 2025-10-24 a las 10.13.56_3af54b9c.jpg"
+                        alt="Noches de estrellas"
+                        class="w-full h-80 object-cover object-center"
+                    >
+                    <div class="p-4">
+                        <h3 class="font-semibold text-rose-700 mb-2">Nuestra primera foto</h3>
+                        <p class="text-gray-600 text-sm">Contigo, cada noche es mágica y llena de estrellas. Nuestro amor brilla más que todas.</p>
+                    </div>
+                </div>
+
+                <!-- Foto 9 -->
+                <div class="photo-item bg-white rounded-2xl shadow-lg overflow-hidden" onclick="openModal('modal9')">
+                    <img
+                        src="imagenes/Imagen de WhatsApp 2025-10-28 a las 22.26.14_fc88e05d.jpg"
+                        alt="Felicidad pura"
+                        class="w-full h-80 object-cover"
+                        style="object-position: center 20%;"
+                    >
+                    <div class="p-4">
+                        <h3 class="font-semibold text-rose-700 mb-2">Donde sales preciosa</h3>
+                        <p class="text-gray-600 text-sm">Eres mi felicidad, mi amor, mi todo en la vida. Sin ti, no soy nada.</p>
+                    </div>
+                </div>
+        </section>
+        
+        <!-- Footer -->
+        <footer class="text-center mt-12 sm:mt-16 py-6 sm:py-8 border-t border-rose-200">
+            <p class="text-rose-800 font-light dancing-font text-2xl">
+                Cada foto es un tesoro de nuestro amor <i class="fas fa-heart text-rose-500"></i>
+            </p>
+            <p class="text-gray-600 text-sm mt-2">
+                © 2025 - Eternamente tuya
+            </p>
+        </footer>
+    </div>
+
+    <!-- Modales para ampliar fotos -->
+    <!-- Modal 1 -->
+    <div id="modal1" class="fixed inset-0 bg-black bg-opacity-80 modal hidden z-50 flex items-center justify-center p-4" onclick="closeModal('modal1')">
+        <div class="max-w-4xl max-h-full">
+            <img src="imagenes/Imagen de WhatsApp 2025-09-10 a las 20.28.24_a95e8bad.jpg" alt="Nuestra primera cita" class="max-w-full max-h-full rounded-lg shadow-2xl">
+        </div>
+        <button class="absolute top-4 right-4 text-white text-3xl hover:text-rose-300 transition-colors">&times;</button>
+    </div>
+    
+    <!-- Modal 2 -->
+    <div id="modal2" class="fixed inset-0 bg-black bg-opacity-80 modal hidden z-50 flex items-center justify-center p-4" onclick="closeModal('modal2')">
+        <div class="max-w-4xl max-h-full">
+            <img src="imagenes/Imagen de WhatsApp 2025-09-10 a las 20.28.25_b211fd3d.jpg" alt="Paseos en el parque" class="max-w-full max-h-full rounded-lg shadow-2xl">
+        </div>
+        <button class="absolute top-4 right-4 text-white text-3xl hover:text-rose-300 transition-colors">&times;</button>
+    </div>
+    
+    <!-- Modal 3 -->
+    <div id="modal3" class="fixed inset-0 bg-black bg-opacity-80 modal hidden z-50 flex items-center justify-center p-4" onclick="closeModal('modal3')">
+        <div class="max-w-4xl max-h-full">
+            <img src="imagenes/Imagen de WhatsApp 2025-09-10 a las 20.28.27_1dd2ecd8.jpg" alt="Cena romántica" class="max-w-full max-h-full rounded-lg shadow-2xl">
+        </div>
+        <button class="absolute top-4 right-4 text-white text-3xl hover:text-rose-300 transition-colors">&times;</button>
+    </div>
+
+    <!-- Modal 4 -->
+    <div id="modal4" class="fixed inset-0 bg-black bg-opacity-80 modal hidden z-50 flex items-center justify-center p-4" onclick="closeModal('modal4')">
+        <div class="max-w-4xl max-h-full">
+            <img src="imagenes/Imagen de WhatsApp 2025-10-24 a las 10.13.52_b4403c19.jpg" alt="Momentos especiales" class="max-w-full max-h-full rounded-lg shadow-2xl">
+        </div>
+        <button class="absolute top-4 right-4 text-white text-3xl hover:text-rose-300 transition-colors">&times;</button>
+    </div>
+
+    <!-- Modal 5 -->
+    <div id="modal5" class="fixed inset-0 bg-black bg-opacity-80 modal hidden z-50 flex items-center justify-center p-4" onclick="closeModal('modal5')">
+        <div class="max-w-4xl max-h-full">
+            <img src="imagenes/Imagen de WhatsApp 2025-10-24 a las 10.13.55_1dd4ff37.jpg" alt="Risas compartidas" class="max-w-full max-h-full rounded-lg shadow-2xl">
+        </div>
+        <button class="absolute top-4 right-4 text-white text-3xl hover:text-rose-300 transition-colors">&times;</button>
+    </div>
+
+    <!-- Modal 6 -->
+    <div id="modal6" class="fixed inset-0 bg-black bg-opacity-80 modal hidden z-50 flex items-center justify-center p-4" onclick="closeModal('modal6')">
+        <div class="max-w-4xl max-h-full">
+            <img src="imagenes/Imagen de WhatsApp 2025-10-24 a las 10.13.55_35d957e5.jpg" alt="Abrazos eternos" class="max-w-full max-h-full rounded-lg shadow-2xl">
+        </div>
+        <button class="absolute top-4 right-4 text-white text-3xl hover:text-rose-300 transition-colors">&times;</button>
+    </div>
+
+    <!-- Modal 7 -->
+    <div id="modal7" class="fixed inset-0 bg-black bg-opacity-80 modal hidden z-50 flex items-center justify-center p-4" onclick="closeModal('modal7')">
+        <div class="max-w-4xl max-h-full">
+            <img src="imagenes/Imagen de WhatsApp 2025-10-24 a las 10.13.55_aed1ad01.jpg" alt="Miradas que hablan" class="max-w-full max-h-full rounded-lg shadow-2xl">
+        </div>
+        <button class="absolute top-4 right-4 text-white text-3xl hover:text-rose-300 transition-colors">&times;</button>
+    </div>
+
+    <!-- Modal 8 -->
+    <div id="modal8" class="fixed inset-0 bg-black bg-opacity-80 modal hidden z-50 flex items-center justify-center p-4" onclick="closeModal('modal8')">
+        <div class="max-w-4xl max-h-full">
+            <img src="imagenes/Imagen de WhatsApp 2025-10-24 a las 10.13.56_3af54b9c.jpg" alt="Noches de estrellas" class="max-w-full max-h-full rounded-lg shadow-2xl">
+        </div>
+        <button class="absolute top-4 right-4 text-white text-3xl hover:text-rose-300 transition-colors">&times;</button>
+    </div>
+
+    <!-- Modal 9 -->
+    <div id="modal9" class="fixed inset-0 bg-black bg-opacity-80 modal hidden z-50 flex items-center justify-center p-4" onclick="closeModal('modal9')">
+        <div class="max-w-4xl max-h-full">
+            <img src="imagenes/Imagen de WhatsApp 2025-10-28 a las 22.26.14_fc88e05d.jpg" alt="Felicidad pura" class="max-w-full max-h-full rounded-lg shadow-2xl">
+        </div>
+        <button class="absolute top-4 right-4 text-white text-3xl hover:text-rose-300 transition-colors">&times;</button>
+    </div>
+
+    <script>
+        // Crear corazones flotantes de fondo
+        function createFloatingHearts() {
+            const container = document.getElementById('hearts-container');
+            container.innerHTML = '';
+            const colors = [
+                '#fecdd3', '#fda4af', '#fb7185', '#f43f5e',
+                '#fbb6ce', '#fbcfe8', '#f9a8d4', '#f472b6', '#fca5a5', '#fcd34d'
+            ];
+            const numHearts = 30;
+            for (let i = 0; i < numHearts; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('heart', 'floating');
+                const size = Math.random() * 30 + 18;
+                heart.style.width = size + 'px';
+                heart.style.height = size + 'px';
+                heart.style.left = Math.random() * 98 + '%';
+                heart.style.top = Math.random() * 98 + '%';
+                heart.style.opacity = (Math.random() * 0.3 + 0.4).toFixed(2);
+                heart.style.animationDuration = (Math.random() * 4 + 6) + 's';
+                heart.style.animationDelay = (Math.random() * 6) + 's';
+                heart.style.background = 'transparent';
+                
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                const shape = document.createElement('div');
+                shape.className = 'heart-shape';
+                shape.innerHTML = `<svg class="heart-svg" viewBox="0 0 32 29" fill="${color}" xmlns="http://www.w3.org/2000/svg"><path d="M23.5 2C21.1 2 19 3.6 16.9 6.1C14.8 3.6 12.7 2 10.3 2C6.1 2 2.5 5.6 2.5 9.8C2.5 18.1 16.9 27 16.9 27C16.9 27 31.3 18.1 31.3 9.8C31.3 5.6 27.7 2 23.5 2Z"/></svg>`;
+                heart.appendChild(shape);
+                container.appendChild(heart);
+            }
+        }
+        
+        // Control de música
+        function setupMusicToggle() {
+            // No reproducir automáticamente, depender de setupPersistentMusic
+        }
+
+        // Control de música persistente
+        function setupPersistentMusic() {
+            const audio = document.getElementById('bg-music');
+
+            // Restaurar estado de la música desde localStorage
+            const savedTime = localStorage.getItem('musicCurrentTime');
+            const savedVolume = localStorage.getItem('musicVolume');
+            const wasPlaying = localStorage.getItem('musicPlaying') === 'true';
+
+            if (savedTime) {
+                audio.currentTime = parseFloat(savedTime);
+            }
+            if (savedVolume) {
+                audio.volume = parseFloat(savedVolume);
+            }
+            if (wasPlaying) {
+                audio.play().catch(() => {});
+            }
+
+            // Guardar estado cuando se sale de la página
+            window.addEventListener('beforeunload', function() {
+                localStorage.setItem('musicCurrentTime', audio.currentTime);
+                localStorage.setItem('musicVolume', audio.volume);
+                localStorage.setItem('musicPlaying', !audio.paused);
+            });
+        }
+
+        // Funciones para modales
+        function openModal(modalId) {
+            const audio = document.getElementById('bg-music');
+            if (!audio.paused) {
+                audio.pause();
+            }
+            document.getElementById(modalId).classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(modalId) {
+            const audio = document.getElementById('bg-music');
+            audio.play().catch(() => {});
+            document.getElementById(modalId).classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+        
+        // Cerrar modal con tecla Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const modals = document.querySelectorAll('.modal');
+                modals.forEach(modal => {
+                    modal.classList.add('hidden');
+                });
+                document.body.style.overflow = 'auto';
+            }
+        });
+        
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', function() {
+            createFloatingHearts();
+            setupPersistentMusic();
+            setupMusicToggle();
+        });
+    </script>
+</body>
+</html>
